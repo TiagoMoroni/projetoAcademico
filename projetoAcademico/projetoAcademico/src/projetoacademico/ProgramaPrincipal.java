@@ -1,8 +1,14 @@
 package ProjetoAcademico;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  *
@@ -44,8 +50,24 @@ public class ProgramaPrincipal {
     private static final int POSICAO_INVALIDA = -1;
 
     public static void main(String[] args) throws IOException {
+        
         Aluno[] alunos = new Aluno[TOTAL_ALUNOS];
         SetorEnsino ensino = new SetorEnsino(DIRETOR_ENSINO, COORDENADOR_ENSINO);
+        
+        try{
+            File f = new File("IFRS.bin");
+            if(!f.exists()){       
+                criarArquivo(alunos, ensino, f);
+            }
+            else{
+                alunos = lerArquivoAluno(f);
+                ensino = lerArquivoEnsino(f);
+            }
+        }catch(IOException e){
+            System.out.println("Algo deu errado");
+        }
+        
+
         int opcao = 4;
 
         do {
@@ -101,6 +123,41 @@ public class ProgramaPrincipal {
         } while (opcao != OP_SAIR);
     }
 
+    
+    //////////////////// ARQUIVO ////////////////////////////////////////////////
+    private static void criarArquivo(Aluno[] alunos, SetorEnsino ensino, File f) throws IOException{
+        f.createNewFile();
+        try(FileOutputStream fos = new FileOutputStream(f); ObjectOutputStream oos = new ObjectOutputStream(fos)){
+            oos.writeObject(alunos);
+            oos.writeObject(ensino);
+        }catch(IOException e){
+            System.out.println("Não foi possível criar a pasta");
+        } 
+    }
+    
+    private static Aluno[] lerArquivoAluno(File f) throws FileNotFoundException, IOException{
+        Aluno[] alunos = null;
+        
+        try(FileInputStream fis = new FileInputStream(f); ObjectInputStream ois = new ObjectInputStream(fis)){
+            alunos = (Aluno[]) ois.readObject();
+        }catch(ClassNotFoundException ex){
+            System.out.println("Erro ao ler arquivo");
+        }
+        return alunos;
+    }
+    
+    private static SetorEnsino lerArquivoEnsino(File f) throws FileNotFoundException, IOException{
+        SetorEnsino ensino = null;
+        
+        try(FileInputStream fis = new FileInputStream(f); ObjectInputStream ois = new ObjectInputStream(fis)){
+            ensino = (SetorEnsino) ois.readObject();
+        }catch(ClassNotFoundException ex){
+            System.out.println("Erro ao ler arquivo");
+        }
+        return ensino;
+    }
+            
+            
     ////////////////// ENSINO ///////////////////////////////////////////
     private static void menu_ensino(String opcoes, SetorEnsino ensino, Aluno[] alunos, BufferedReader br) throws IOException {
         int opcao = menu(opcoes, br);
