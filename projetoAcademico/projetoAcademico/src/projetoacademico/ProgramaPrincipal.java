@@ -1,14 +1,17 @@
 package ProjetoAcademico;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 /**
  *
@@ -65,6 +68,14 @@ public class ProgramaPrincipal {
             }
         }catch(IOException e){
             System.out.println("Algo deu errado");
+            File log = new File("log.txt");
+            if(!log.exists()){
+                log.createNewFile();
+            }
+            FileWriter fw = new FileWriter(log);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println("Algo deu Errado");
         }
         
 
@@ -132,6 +143,14 @@ public class ProgramaPrincipal {
             oos.writeObject(ensino);
         }catch(IOException e){
             System.out.println("Não foi possível criar a pasta");
+            File log = new File("log.txt");
+            if(!log.exists()){
+                log.createNewFile();
+            }
+            FileWriter fw = new FileWriter(log);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println("Algo deu Errado");
         } 
     }
     
@@ -142,6 +161,14 @@ public class ProgramaPrincipal {
             alunos = (Aluno[]) ois.readObject();
         }catch(ClassNotFoundException ex){
             System.out.println("Erro ao ler arquivo");
+            File log = new File("log.txt");
+            if(!log.exists()){
+                log.createNewFile();
+            }
+            FileWriter fw = new FileWriter(log);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println("Algo deu Errado");            
         }
         return alunos;
     }
