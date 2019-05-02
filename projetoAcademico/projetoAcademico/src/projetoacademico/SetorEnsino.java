@@ -5,6 +5,7 @@
  */
 package ProjetoAcademico;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
  *
  * @author coelho
  */
-public class SetorEnsino {
+public class SetorEnsino implements Serializable {
 
     public static final int MAX_PROFESSORES = 60;
     public static final int MAX_CURSOS = 12;

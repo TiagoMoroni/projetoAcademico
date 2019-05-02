@@ -5,13 +5,14 @@
  */
 package ProjetoAcademico;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author coelho
  */
-public class Aluno {
+public class Aluno implements Serializable {
 
     private String nome;
     private Curso curso;

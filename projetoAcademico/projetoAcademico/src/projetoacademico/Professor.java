@@ -1,12 +1,13 @@
 package ProjetoAcademico;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author coelho
  */
-public class Professor {
+public class Professor implements Serializable {
 
     private String nome;
     private String areas[];

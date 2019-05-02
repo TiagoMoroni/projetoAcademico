@@ -1,12 +1,13 @@
 package ProjetoAcademico;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author coelho
  */
-public class Disciplina {
+public class Disciplina implements Serializable {
 
     public static final int MAX_ALUNOS = 30;
 

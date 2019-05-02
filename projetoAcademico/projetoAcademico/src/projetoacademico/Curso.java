@@ -5,13 +5,14 @@
  */
 package ProjetoAcademico;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author coelho
  */
-public class Curso {
+public class Curso implements Serializable {
 
     public static final int MAX_DISCIPLINAS = 40;
     private String nome;
@@ -25,7 +26,7 @@ public class Curso {
     public boolean novaDisciplina(String nome, int ano, Professor professor) {
         for (int i = 0; i < disciplinas.length; i++) {
             if (disciplinas[i] != null) {
-                disciplinas[i] = new Disciplina(professor, nome, ano);
+                disciplinas[i] = new Disciplina(); //professor, nome, ano
                 return true;
             }
         }
