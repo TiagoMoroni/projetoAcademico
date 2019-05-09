@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author coelho
  */
-public class Professor implements Serializable {
+public class Professor implements Serializable, Comparable<Professor> {
 
     private String nome;
     private String areas[];
@@ -117,6 +117,13 @@ public class Professor implements Serializable {
                 + siape
                 + "\n areas: "
                 + nomes_areas;
+    }
+
+    @Override
+    public int compareTo(Professor other) {
+        long mat1 = this.siape;
+        long mat2 = other.siape;
+        return this.nome.compareTo(other.nome) + mat1.compareTo(mat2);
     }
     
     
