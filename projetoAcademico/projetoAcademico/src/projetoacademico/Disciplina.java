@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author coelho
  */
-public class Disciplina implements Serializable {
+public class Disciplina implements Serializable, Comparable<Disciplina> {
 
     public static final int MAX_ALUNOS = 30;
 
@@ -153,5 +153,10 @@ public class Disciplina implements Serializable {
                 + "\n nome: " + nome
                 + "\n ano: " + ano
                 + "\n Notas: " + notas_alunos;
+    }
+    
+    @Override
+    public int compareTo(Disciplina other) {
+        return this.nome.compareTo(other.nome);
     }
 }

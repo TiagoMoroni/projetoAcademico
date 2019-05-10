@@ -121,8 +121,8 @@ public class Professor implements Serializable, Comparable<Professor> {
 
     @Override
     public int compareTo(Professor other) {
-        long mat1 = this.siape;
-        long mat2 = other.siape;
+        Long mat1 = this.siape;
+        Long mat2 = other.siape;
         return this.nome.compareTo(other.nome) + mat1.compareTo(mat2);
     }
     

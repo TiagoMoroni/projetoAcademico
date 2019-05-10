@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author coelho
  */
-public class Aluno implements Serializable {
+public class Aluno implements Serializable, Comparable<Aluno> {
 
     private String nome;
     private Curso curso;
@@ -127,4 +127,12 @@ public class Aluno implements Serializable {
                 + "\n matricula: " + matricula
                 + formado;
     }
+
+    @Override
+    public int compareTo(Aluno other) {
+        Long mat1 = this.matricula;
+        Long mat2 = other.matricula;
+        return this.nome.compareTo(other.nome) + mat1.compareTo(mat2);
+    }
+
 }
