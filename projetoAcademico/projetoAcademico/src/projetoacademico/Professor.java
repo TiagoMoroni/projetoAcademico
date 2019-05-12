@@ -1,6 +1,7 @@
 package ProjetoAcademico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class Professor implements Serializable, Comparable<Professor> {
 
     private String nome;
-    private String areas[];
+    private ArrayList<String> areas;
     private long siape;
 
     public Professor() {
@@ -18,9 +19,9 @@ public class Professor implements Serializable, Comparable<Professor> {
     }
 
     public boolean novaArea(String area) {
-        for (int i = 0; i < areas.length; i++) {
-            if (areas[i] == null) {
-                areas[i] = area;
+        for (int i = 0; i < areas.size(); i++) {
+            if (areas.get(i) == null) {
+                areas.set(i, area);
                 return true;
             }
         }
@@ -28,9 +29,9 @@ public class Professor implements Serializable, Comparable<Professor> {
     }
     
     public boolean removerArea(String area) {
-        for (int i = 0; i < areas.length; i++) {
-            if (areas[i] != null && areas[i].equals(area)) {
-                areas[i] = null;
+        for (int i = 0; i < areas.size(); i++) {
+            if (areas.get(i) != null && areas.get(i).equals(area)) {
+                areas.set(i, null);
                 return true;
             }
         }
@@ -45,11 +46,11 @@ public class Professor implements Serializable, Comparable<Professor> {
         this.nome = nome;
     }
 
-    public String[] getAreas() {
+    public ArrayList<String> getAreas() {
         return areas;
     }
 
-    public void setAreas(String[] areas) {
+    public void setAreas(ArrayList<String> areas) {
         this.areas = areas;
     }
 
@@ -66,7 +67,7 @@ public class Professor implements Serializable, Comparable<Professor> {
         this.siape = siape;
     }
 
-    public Professor(String nome, long siape, String[] areas) {
+    public Professor(String nome, long siape, ArrayList<String> areas) {
         this.nome = nome;
         this.areas = areas;
         this.siape = siape;
@@ -75,7 +76,7 @@ public class Professor implements Serializable, Comparable<Professor> {
     public Professor(String nome, long siape, int numeroAreas) {
         this.nome = nome;
         this.siape = siape;
-        this.areas = new String[numeroAreas];
+        this.areas = new ArrayList();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ProjetoAcademico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -11,20 +12,20 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
 
     public static final int MAX_ALUNOS = 30;
 
-    private Aluno alunos[];
+    private ArrayList<Aluno> alunos;
     private Professor professor;
     private String nome;
     private int ano;
     private float notas[];
 
     public Disciplina() {
-        alunos = new Aluno[MAX_ALUNOS];
+        alunos = new ArrayList();
         notas = new float[MAX_ALUNOS];
     }
 
     public boolean registrarNota(float nota, String nome) {
         for (int i = 0; i < notas.length; i++) {
-            if (alunos[i] != null && alunos[i].getNome().equals(nome)) {
+            if (alunos.get(i) != null && alunos.get(i).getNome().equals(nome)) {
                 notas[i] = nota;
                 return true;
             }
@@ -33,9 +34,9 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
     }
 
     public boolean registrarAluno(String nome, Curso curso, int anoIngresso, long matricula) {
-        for (int i = 0; i < alunos.length; i++) {
-            if (alunos[i] != null) {
-                alunos[i] = new Aluno(nome, curso, anoIngresso, matricula);
+        for (int i = 0; i < alunos.size(); i++) {
+            if (alunos.get(i) != null) {
+                alunos.set(i, new Aluno(nome, curso, anoIngresso, matricula));
                 return true;
             }
         }
@@ -47,9 +48,9 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
     }
 
     public boolean removerAluno(String nome) {
-        for (int i = 0; i < alunos.length; i++) {
-            if (alunos[i].getNome().equals(nome)) {
-                alunos[i] = null;
+        for (int i = 0; i < alunos.size(); i++) {
+            if (alunos.get(i).getNome().equals(nome)) {
+                alunos.set(i, null);
                 return true;
             }
         }
@@ -60,11 +61,11 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
         registrarAluno(a.getNome(), a.getCurso(), a.getAnoIngresso(), a.getMatricula());
     }
 
-    public Aluno[] getAlunos() {
+    public ArrayList<Aluno> getAlunos() {
         return alunos;
     }
 
-    public void setAlunos(Aluno[] alunos) {
+    public void setAlunos(ArrayList<Aluno> alunos) {
         this.alunos = alunos;
     }
 
@@ -104,12 +105,12 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
-        this.alunos = new Aluno[MAX_ALUNOS];
+        this.alunos = new ArrayList();
         this.notas = new float[MAX_ALUNOS];
     }
 
     public Disciplina(int quantAlunos, Professor professor, String nome, int ano) {
-        this.alunos = new Aluno[quantAlunos];
+        this.alunos = new ArrayList();
         this.notas = new float[quantAlunos];
         this.professor = professor;
         this.nome = nome;
@@ -143,8 +144,8 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
     public String toString() {
         String notas_alunos = "";
 
-        for (int i = 0; i < alunos.length; i++) {
-            Aluno aluno = alunos[i];
+        for (int i = 0; i < alunos.size(); i++) {
+            Aluno aluno = alunos.get(i);
             float nota = notas[i];
 
             notas_alunos += aluno.toString() + " Nota: " + nota + "\n";

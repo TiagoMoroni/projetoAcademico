@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -54,8 +55,8 @@ public class ProgramaPrincipal {
 
     public static void main(String[] args) throws IOException {
         
-        Aluno[] alunos = new Aluno[TOTAL_ALUNOS];
-        SetorEnsino ensino = new SetorEnsino(DIRETOR_ENSINO, COORDENADOR_ENSINO);
+        ArrayList<Aluno> alunos;
+        ArrayList<SetorEnsino> ensino;
         
         try{
             File f = new File("IFRS.bin");
@@ -251,28 +252,28 @@ public class ProgramaPrincipal {
         for (Aluno aluno : alunos) {
             if (aluno != null && aluno.getMatricula() == matricula) {//aluno matriculado
                 aluno_nao_encontrado = false;
-                Curso cursos[] = ensino.getCursos();
+                ArrayList<Curso> cursos = ensino.getCursos();
 
                 if (cursos != null) {
                     for (Curso curso : cursos) {
-                        Disciplina disciplinas[] = curso.getDisciplinas();
+                        Disciplina[] disciplinas = curso.getDisciplinas();
 
                         if (disciplinas != null) {
                             for (Disciplina disciplina : disciplinas) {
                                 if (disciplina != null) {
-                                    Aluno a[] = disciplina.getAlunos();
+                                    ArrayList<Aluno> a = disciplina.getAlunos();
                                     int i = 0;
 
-                                    while (i != a.length
-                                            && a[i] != null
-                                            && a[i].getMatricula() != matricula) {
+                                    while (i != a.size()
+                                            && a.get(i) != null
+                                            && a.get(i).getMatricula() != matricula) {
                                         i++;
                                     }
                                     if (disciplina.getNotas() != null) {
                                         float nota = disciplina.getNotas()[i];
 
                                         System.out.println("A nota do aluno " 
-                                                + a[i].toString() 
+                                                + a.get(i).toString() 
                                                 + " é de " 
                                                 + nota 
                                                 + " na disciplina " 
@@ -332,9 +333,9 @@ public class ProgramaPrincipal {
                 String area = br.readLine();
 
                 if (nova_area(posicao_professor, ensino, area)) {
-                    System.out.println("Área " + area + " cadastrada para o professor " + ensino.getProfessores()[posicao_professor].toString());
+                    System.out.println("Área " + area + " cadastrada para o professor " + ensino.getProfessores().get(posicao_professor).toString());
                 } else {
-                    System.err.println("O limite de áreas foi atingido para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
+                    System.err.println("O limite de áreas foi atingido para o professor com siape " + ensino.getProfessores().get(posicao_professor).getSiape());
                 }
                 break;
             case OP_PROFESSOR_ALTERAR_NOTA:
@@ -378,9 +379,9 @@ public class ProgramaPrincipal {
                 area = br.readLine();
 
                 if (remover_area(posicao_professor, ensino, area)) {
-                    System.out.println("Área " + area + " foi removido com sucesso para o professor " + ensino.getProfessores()[posicao_professor].toString());
+                    System.out.println("Área " + area + " foi removido com sucesso para o professor " + ensino.getProfessores().get(posicao_professor).toString());
                 } else {
-                    System.err.println("A área " + area + " não estava cadastrada para o professor com siape " + ensino.getProfessores()[posicao_professor].getSiape());
+                    System.err.println("A área " + area + " não estava cadastrada para o professor com siape " + ensino.getProfessores().get(posicao_professor).getSiape());
                 }
                 break;
         }
@@ -418,11 +419,11 @@ public class ProgramaPrincipal {
         System.out.println("Quantas áreas?");
         int quantAreas = Integer.parseInt(br.readLine());
 
-        p.setAreas(new String[quantAreas]);
+        p.setAreas(new ArrayList());
         System.out.println("Informe as áreas:");
         for (int i = 0; i < quantAreas; i++) {
-            if (p.getAreas() != null && p.getAreas()[i] != null) {
-                p.getAreas()[i] = br.readLine();
+            if (p.getAreas() != null && p.getAreas().get(i) != null) {
+                p.getAreas().set(i, br.readLine());
             }
         }
         return p;
@@ -430,9 +431,9 @@ public class ProgramaPrincipal {
 
     private static int login_professor(int siape, SetorEnsino ensino, BufferedReader br) {
         for (int i = 0; ensino.getProfessores() != null
-                && i < ensino.getProfessores().length; i++) {
-            if (ensino.getProfessores()[i] != null
-                    && ensino.getProfessores()[i].getSiape() == siape) {
+                && i < ensino.getProfessores().size(); i++) {
+            if (ensino.getProfessores().get(i) != null
+                    && ensino.getProfessores().get(i).getSiape() == siape) {
                 return i;
             }
         }
@@ -441,11 +442,11 @@ public class ProgramaPrincipal {
 
     private static boolean nova_area(int pos_professor, SetorEnsino ensino, String area) {
         if (ensino.getProfessores() != null) {
-            String areas[] = ensino.getProfessores()[pos_professor].getAreas();
+            ArrayList<String> areas = ensino.getProfessores().get(pos_professor).getAreas();
 
-            for (int i = 0; areas != null && i < areas.length; i++) {
-                if (areas[i] == null) {
-                    areas[i] = area;
+            for (int i = 0; areas != null && i < areas.size(); i++) {
+                if (areas.get(i) == null) {
+                    areas.set(i, area);
                     return true;
                 }
             }
@@ -455,11 +456,11 @@ public class ProgramaPrincipal {
 
     private static boolean remover_area(int pos_professor, SetorEnsino ensino, String area) {
         if (ensino.getProfessores() != null) {
-            String areas[] = ensino.getProfessores()[pos_professor].getAreas();
+            ArrayList<String> areas = ensino.getProfessores().get(pos_professor).getAreas();
 
-            for (int i = 0; areas != null && i < areas.length; i++) {
-                if (areas[i].equals(area)) {
-                    areas[i] = null;
+            for (int i = 0; areas != null && i < areas.size(); i++) {
+                if (areas.get(i).equals(area)) {
+                    areas.set(i, null);
                     return true;
                 }
             }
@@ -484,11 +485,11 @@ public class ProgramaPrincipal {
             } else {
 
                 System.out.println("Informe as notas dos alunos: ");
-                float notas[] = new float[d.getAlunos().length];
+                float notas[] = new float[d.getAlunos().size()];
                 int i = 0;
 
-                while (i < d.getAlunos().length) {
-                    System.out.println("Nota do aluno " + d.getAlunos()[i].toString());
+                while (i < d.getAlunos().size()) {
+                    System.out.println("Nota do aluno " + d.getAlunos().get(i).toString());
                     notas[i] = Float.parseFloat(br.readLine());
                     i++;
                 }
@@ -598,7 +599,7 @@ public class ProgramaPrincipal {
     }
 
     private static void ver_cursos(SetorEnsino ensino) {
-        Curso cursos[] = ensino.getCursos();
+        ArrayList<Curso> cursos = ensino.getCursos();
 
         if (cursos != null) {
             for (Curso curso : cursos) {

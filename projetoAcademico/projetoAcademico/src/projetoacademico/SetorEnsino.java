@@ -6,6 +6,7 @@
 package ProjetoAcademico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -18,25 +19,25 @@ public class SetorEnsino implements Serializable {
     public static final int MAX_PROFESSORES = 60;
     public static final int MAX_CURSOS = 12;
     
-    private Curso cursos[];
-    private Professor professores[];
+    private ArrayList<Curso> cursos;
+    private ArrayList<Professor> professores;
     private String diretor;
     private String coordenador;
 
     public boolean novoProfessor(String nome, long siape) {
-        for (int i = 0; i < professores.length; i++) {
-            if (professores[i] != null) {
-                professores[i] = new Professor(nome, siape);
+        for (int i = 0; i < professores.size(); i++) {
+            if (professores.get(i) != null) {
+                professores.set(i, new Professor(nome, siape));
                 return true;
             }
         }
         return false;
     }
 
-    public boolean novoProfessor(String nome, long siape, String areas[]) {
-        for (int i = 0; i < professores.length; i++) {
-            if (professores[i] != null) {
-                professores[i] = new Professor(nome, siape, areas);
+    public boolean novoProfessor(String nome, long siape, ArrayList<String> areas) {
+        for (int i = 0; i < professores.size(); i++) {
+            if (professores.get(i) != null) {
+                professores.set(i, new Professor(nome, siape, areas));
                 return true;
             }
         }
@@ -44,9 +45,9 @@ public class SetorEnsino implements Serializable {
     }
 
     public boolean novoProfessor(Professor p) {
-        for (int i = 0; i < professores.length; i++) {
-            if (professores[i] != null) {
-                professores[i] = p;
+        for (int i = 0; i < professores.size(); i++) {
+            if (professores.get(i) != null) {
+                professores.set(i, p);
                 return true;
             }
         }
@@ -54,28 +55,28 @@ public class SetorEnsino implements Serializable {
     }
 
     public boolean demitirProfessor(long siape) {
-        for (int i = 0; i < professores.length; i++) {
-            if (professores[i] != null && professores[i].getSiape() == siape) {
-                professores[i] = null;
+        for (int i = 0; i < professores.size(); i++) {
+            if (professores.get(i) != null && professores.get(i).getSiape() == siape) {
+                professores.set(i, null);
                 return true;
             }
         }
         return false;
     }
 
-    public Curso[] getCursos() {
+    public ArrayList<Curso> getCursos() {
         return cursos;
     }
 
-    public void setCursos(Curso[] cursos) {
+    public void setCursos(ArrayList<Curso> cursos) {
         this.cursos = cursos;
     }
 
-    public Professor[] getProfessores() {
+    public ArrayList<Professor> getProfessores() {
         return professores;
     }
 
-    public void setProfessores(Professor[] professores) {
+    public void setProfessores(ArrayList<Professor> professores) {
         this.professores = professores;
     }
 
@@ -95,20 +96,20 @@ public class SetorEnsino implements Serializable {
         this.coordenador = coordenador;
     }
 
-    public SetorEnsino(Curso[] cursos, Professor[] professores, String diretor, String coordenador) {
+    public SetorEnsino(ArrayList<Curso> cursos, ArrayList<Professor> professores, String diretor, String coordenador) {
         this.cursos = cursos;
         this.professores = professores;
         this.diretor = diretor;
         this.coordenador = coordenador;
-        this.professores = new Professor[MAX_PROFESSORES];
+        this.professores = new ArrayList();
 
     }
 
     public SetorEnsino(String diretor, String coordenador) {
         this.diretor = diretor;
         this.coordenador = coordenador;
-        this.professores = new Professor[MAX_PROFESSORES];
-        this.cursos = new Curso[MAX_CURSOS];
+        this.professores = new ArrayList();
+        this.cursos = new ArrayList();
     }
 
     public void matricularAluno(Aluno a) {
@@ -127,10 +128,10 @@ public class SetorEnsino implements Serializable {
             if (curso.getNome().equals(nome_curso)) {
                 for (Disciplina disciplina : curso.getDisciplinas()) {
                     if (disciplina.getNome().equals(nome_disciplina)) {
-                        Aluno alunos[] = disciplina.getAlunos();
+                        ArrayList<Aluno> alunos = disciplina.getAlunos();
 
-                        for (int i = 0; i < alunos.length; i++) {
-                            if (alunos[i].getNome().equals(nome_aluno)) {
+                        for (int i = 0; i < alunos.size(); i++) {
+                            if (alunos.get(i).getNome().equals(nome_aluno)) {
                                 disciplina.getNotas()[i] = nova_nota;
                                 return true;
                             }
@@ -171,9 +172,9 @@ public class SetorEnsino implements Serializable {
     }
 
     public boolean novoCurso(Curso c) {
-        for (int i = 0; i < getCursos().length; i++) {
-            if (getCursos()[i] == null) {
-                getCursos()[i] = c;
+        for (int i = 0; i < getCursos().size(); i++) {
+            if (getCursos().get(i) == null) {
+                getCursos().set(i, c);
                 return true;
             }
         }
@@ -183,8 +184,8 @@ public class SetorEnsino implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 61 * hash + Arrays.deepHashCode(this.cursos);
-        hash = 61 * hash + Arrays.deepHashCode(this.professores);
+        hash = 61 * hash + Objects.hashCode(this.cursos);
+        hash = 61 * hash + Objects.hashCode(this.professores);
         hash = 61 * hash + Objects.hashCode(this.diretor);
         hash = 61 * hash + Objects.hashCode(this.coordenador);
         return hash;

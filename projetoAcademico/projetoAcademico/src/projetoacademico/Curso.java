@@ -6,6 +6,7 @@
 package ProjetoAcademico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -17,16 +18,16 @@ public class Curso implements Serializable, Comparable<Curso> {
     public static final int MAX_DISCIPLINAS = 40;
     private String nome;
     private String ppc;
-    private Disciplina disciplinas[];
+    private ArrayList<Disciplina> disciplinas;
 
     public Curso() {
 
     }
 
     public boolean novaDisciplina(String nome, int ano, Professor professor) {
-        for (int i = 0; i < disciplinas.length; i++) {
-            if (disciplinas[i] != null) {
-                disciplinas[i] = new Disciplina(); //professor, nome, ano
+        for (int i = 0; i < disciplinas.size(); i++) {
+            if (disciplinas.get(i) != null) {
+                disciplinas.set(i, new Disciplina()); //professor, nome, ano
                 return true;
             }
         }
@@ -34,9 +35,9 @@ public class Curso implements Serializable, Comparable<Curso> {
     }
 
     public boolean removerDisciplina(String nome) {
-        for (int i = 0; i < disciplinas.length; i++) {
-            if (disciplinas[i] != null && disciplinas[i].getNome().equals(nome)) {
-                disciplinas[i] = null;
+        for (int i = 0; i < disciplinas.size(); i++) {
+            if (disciplinas.get(i) != null && disciplinas.get(i).getNome().equals(nome)) {
+                disciplinas.set(i, null);
                 return true;
             }
         }
@@ -59,15 +60,15 @@ public class Curso implements Serializable, Comparable<Curso> {
         this.ppc = ppc;
     }
 
-    public Disciplina[] getDisciplinas() {
+    public ArrayList<Disciplina> getDisciplinas() {
         return disciplinas;
     }
 
-    public void setDisciplinas(Disciplina[] disciplinas) {
+    public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
     }
 
-    public Curso(String nome, String ppc, Disciplina[] disciplinas) {
+    public Curso(String nome, String ppc, ArrayList<Disciplina> disciplinas) {
         this.nome = nome;
         this.ppc = ppc;
         this.disciplinas = disciplinas;
@@ -76,7 +77,7 @@ public class Curso implements Serializable, Comparable<Curso> {
     public Curso(String nome, String ppc) {
         this.nome = nome;
         this.ppc = ppc;
-        this.disciplinas = new Disciplina[MAX_DISCIPLINAS];
+        this.disciplinas = new ArrayList();
     }
 
     @Override
@@ -113,9 +114,9 @@ public class Curso implements Serializable, Comparable<Curso> {
                 + "\n disciplinas: \n" 
                 + disciplina;
     }
-    
+
     @Override
-    public int compareTo(Curso other) {
-        return this.nome.compareTo(other.nome);
+    public int compareTo(Curso o) {
+        return
     }
 }
