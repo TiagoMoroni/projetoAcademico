@@ -132,7 +132,7 @@ public class SetorEnsino implements Serializable {
 
                         for (int i = 0; i < alunos.size(); i++) {
                             if (alunos.get(i).getNome().equals(nome_aluno)) {
-                                disciplina.getNotas()[i] = nova_nota;
+                                disciplina.getNotas().set(i, nova_nota);
                                 return true;
                             }
                         }
@@ -143,7 +143,7 @@ public class SetorEnsino implements Serializable {
         return false;
     }
 
-    public void salvaNotas(float[] notas,
+    public void salvaNotas(ArrayList<Float> notas,
             Curso curso,
             Disciplina disciplina) {
         for (Curso c : cursos) {
@@ -160,9 +160,9 @@ public class SetorEnsino implements Serializable {
     public boolean novaDisciplina(Disciplina disciplina, Curso curso) {
         for (Curso c : cursos) {
             if (c.equals(curso)) {
-                for (int i = 0; i < c.getDisciplinas().length; i++) {
-                    if (c.getDisciplinas()[i] == null) {
-                        c.getDisciplinas()[i] = disciplina;
+                for (int i = 0; i < c.getDisciplinas().size(); i++) {
+                    if (c.getDisciplinas().get(i) == null) {
+                        c.getDisciplinas().add(disciplina);
                         return true;
                     }
                 }

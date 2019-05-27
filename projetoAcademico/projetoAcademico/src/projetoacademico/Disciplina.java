@@ -2,6 +2,7 @@ package ProjetoAcademico;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -16,17 +17,17 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
     private Professor professor;
     private String nome;
     private int ano;
-    private float notas[];
+    private HashMap<Long, Float> notas;
 
     public Disciplina() {
         alunos = new ArrayList();
-        notas = new float[MAX_ALUNOS];
+        notas = new HashMap();
     }
 
     public boolean registrarNota(float nota, String nome) {
-        for (int i = 0; i < notas.length; i++) {
-            if (alunos.get(i) != null && alunos.get(i).getNome().equals(nome)) {
-                notas[i] = nota;
+        for (int i = 0; i < notas.size(); i++) {
+            if (alunos.get(i).getNome().equals(nome)) {
+                notas.put(alunos.get(i).getMatricula(), nota);
                 return true;
             }
         }
@@ -93,11 +94,11 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
         this.ano = ano;
     }
 
-    public float[] getNotas() {
+    public HashMap<Long, Float> getNotas() {
         return notas;
     }
 
-    public void setNotas(float[] notas) {
+    public void setNotas(HashMap<Long, Float> notas) {
         this.notas = notas;
     }
 
@@ -106,12 +107,12 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
         this.nome = nome;
         this.ano = ano;
         this.alunos = new ArrayList();
-        this.notas = new float[MAX_ALUNOS];
+        this.notas = new HashMap();
     }
 
     public Disciplina(int quantAlunos, Professor professor, String nome, int ano) {
         this.alunos = new ArrayList();
-        this.notas = new float[quantAlunos];
+        this.notas = new HashMap();
         this.professor = professor;
         this.nome = nome;
         this.ano = ano;
@@ -146,7 +147,7 @@ public class Disciplina implements Serializable, Comparable<Disciplina> {
 
         for (int i = 0; i < alunos.size(); i++) {
             Aluno aluno = alunos.get(i);
-            float nota = notas[i];
+            float nota = notas.get(i);
 
             notas_alunos += aluno.toString() + " Nota: " + nota + "\n";
         }

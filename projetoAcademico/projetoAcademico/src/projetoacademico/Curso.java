@@ -15,7 +15,6 @@ import java.util.Objects;
  */
 public class Curso implements Serializable, Comparable<Curso> {
 
-    public static final int MAX_DISCIPLINAS = 40;
     private String nome;
     private String ppc;
     private ArrayList<Disciplina> disciplinas;
@@ -25,19 +24,14 @@ public class Curso implements Serializable, Comparable<Curso> {
     }
 
     public boolean novaDisciplina(String nome, int ano, Professor professor) {
-        for (int i = 0; i < disciplinas.size(); i++) {
-            if (disciplinas.get(i) != null) {
-                disciplinas.set(i, new Disciplina()); //professor, nome, ano
-                return true;
-            }
-        }
-        return false;
+        disciplinas.add(new Disciplina(professor, nome, ano));
+        return true;
     }
 
     public boolean removerDisciplina(String nome) {
-        for (int i = 0; i < disciplinas.size(); i++) {
-            if (disciplinas.get(i) != null && disciplinas.get(i).getNome().equals(nome)) {
-                disciplinas.set(i, null);
+        for(Disciplina disc : disciplinas){
+            if(disc.getNome().equals(nome)){
+                disciplinas.remove(disc);
                 return true;
             }
         }
@@ -78,7 +72,7 @@ public class Curso implements Serializable, Comparable<Curso> {
         this.nome = nome;
         this.ppc = ppc;
         this.disciplinas = new ArrayList();
-    }
+    }               
 
     @Override
     public int hashCode() {
@@ -117,6 +111,7 @@ public class Curso implements Serializable, Comparable<Curso> {
 
     @Override
     public int compareTo(Curso o) {
-        return
+        return this.nome.compareTo(o.nome); 
     }
+
 }

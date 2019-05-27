@@ -6,6 +6,7 @@
 package ProjetoAcademico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,7 +14,9 @@ import java.io.Serializable;
  */
 public class Dados implements Serializable{
     private SetorEnsino ensino;
-    private Aluno[]     alunos;
+    private ArrayList<Aluno> alunos;
+     
+    
 
     public SetorEnsino getEnsino() {
         return ensino;
@@ -23,15 +26,15 @@ public class Dados implements Serializable{
         this.ensino = ensino;
     }
 
-    public Aluno[] getAlunos() {
+    public ArrayList<Aluno> getAlunos() {
         return alunos;
     }
 
-    public void setAlunos(Aluno[] alunos) {
+    public void setAlunos(ArrayList<Aluno> alunos) {
         this.alunos = alunos;
     }
 
-    public Dados(SetorEnsino ensino, Aluno[] alunos) {
+    public Dados(SetorEnsino ensino, ArrayList<Aluno> alunos) {
         this.ensino = ensino;
         this.alunos = alunos;
     }

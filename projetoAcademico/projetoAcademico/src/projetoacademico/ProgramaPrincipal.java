@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -55,8 +56,8 @@ public class ProgramaPrincipal {
 
     public static void main(String[] args) throws IOException {
         
-        ArrayList<Aluno> alunos;
-        ArrayList<SetorEnsino> ensino;
+        ArrayList<Aluno> alunos = new ArrayList<>();
+        SetorEnsino ensino = new SetorEnsino(DIRETOR_ENSINO, COORDENADOR_ENSINO);
         
         try{
             File f = new File("IFRS.bin");
@@ -93,7 +94,7 @@ public class ProgramaPrincipal {
                     br);
             switch (opcao) {
                 case OP_ALUNO:
-                    menu_alunos("MENU 2: \n "
+                    menu_alunos("MENU 2: \n"
                             + "[" + OP_ALUNO_VER_CURSOS + "] Ver Cursos \n"
                             + "[" + OP_ALUNO_VER_NOTAS + "] Ver notas \n"
                             + "[" + OP_ALUNO_VOLTAR + "] Voltar",
@@ -176,7 +177,7 @@ public class ProgramaPrincipal {
     }
     
     ////////////////// ENSINO ///////////////////////////////////////////
-    private static void menu_ensino(String opcoes, SetorEnsino ensino, Aluno[] alunos, BufferedReader br) throws IOException {
+    private static void menu_ensino(String opcoes, SetorEnsino ensino, ArrayList<Aluno> alunos, BufferedReader br) throws IOException {
         int opcao = menu(opcoes, br);
 
         switch (opcao) {
@@ -224,7 +225,7 @@ public class ProgramaPrincipal {
     }
 
     ////////////////// ALUNO ///////////////////////////////////////////
-    private static void menu_alunos(String opcoes, SetorEnsino ensino, Aluno alunos[], BufferedReader br) throws IOException {
+    private static void menu_alunos(String opcoes, SetorEnsino ensino, ArrayList<Aluno> alunos, BufferedReader br) throws IOException {
         int opcao = menu(opcoes, br);
 
         switch (opcao) {
@@ -240,66 +241,40 @@ public class ProgramaPrincipal {
         }
     }
 
-    private static void novo_aluno(SetorEnsino ensino, Aluno[] alunos, BufferedReader br) throws IOException {
+    private static void novo_aluno(SetorEnsino ensino, ArrayList<Aluno> alunos, BufferedReader br) throws IOException {
         Aluno a = cadastra_aluno(ensino, br, alunos);
 
         cadastra_disciplinas_aluno(br, ensino, a);
     }
 
-    private static void ver_notas(SetorEnsino ensino, Aluno alunos[], long matricula) {
-        boolean aluno_nao_encontrado = true;
-
-        for (Aluno aluno : alunos) {
-            if (aluno != null && aluno.getMatricula() == matricula) {//aluno matriculado
-                aluno_nao_encontrado = false;
-                ArrayList<Curso> cursos = ensino.getCursos();
-
-                if (cursos != null) {
-                    for (Curso curso : cursos) {
-                        Disciplina[] disciplinas = curso.getDisciplinas();
-
-                        if (disciplinas != null) {
-                            for (Disciplina disciplina : disciplinas) {
-                                if (disciplina != null) {
-                                    ArrayList<Aluno> a = disciplina.getAlunos();
-                                    int i = 0;
-
-                                    while (i != a.size()
-                                            && a.get(i) != null
-                                            && a.get(i).getMatricula() != matricula) {
-                                        i++;
-                                    }
-                                    if (disciplina.getNotas() != null) {
-                                        float nota = disciplina.getNotas()[i];
-
-                                        System.out.println("A nota do aluno " 
-                                                + a.get(i).toString() 
-                                                + " é de " 
-                                                + nota 
-                                                + " na disciplina " 
-                                                + disciplina.toString());
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+    private static void ver_notas(SetorEnsino ensino, ArrayList<Aluno> alunos, long matricula) {
+        HashMap<String, HashMap<String, HashMap<Long, Float>>> listanotas = obterNotas(ensino);
+    }
+    
+    private static HashMap<String, HashMap<String, HashMap<Long, Float>>> obterNotas(SetorEnsino ensino){
+        HashMap<Long, Float> nomenota = new HashMap();
+        HashMap<String, HashMap<Long, Float>> discalunos = new HashMap();
+        HashMap<String, HashMap<String, HashMap<Long, Float>>> cursodisc = new HashMap();
+        for(Curso cursos : ensino.getCursos()){
+            Curso cursotemp = cursos;
+            for(Disciplina disciplinas : cursotemp.getDisciplinas()){
+                Disciplina disctemp = disciplinas;
+                nomenota = disctemp.getNotas();
+                discalunos.put(disctemp.getNome(), nomenota);
             }
+            cursodisc.put(cursotemp.getNome(), discalunos);
         }
-        if (aluno_nao_encontrado) {
-            System.err.println("Aluno não matriculado no sistema.");
-        }
+        return cursodisc;
     }
 
-    private static Aluno cadastra_aluno(SetorEnsino ensino, BufferedReader br, Aluno[] alunos) throws IOException {
+    private static Aluno cadastra_aluno(SetorEnsino ensino, BufferedReader br, ArrayList<Aluno> alunos) throws IOException {
         Aluno a = cria_aluno(ensino, br);
 
-        for (int i = 0; i < alunos.length; i++) {
-            Aluno aluno = alunos[i];
+        for (int i = 0; i < alunos.size(); i++) {
+            Aluno aluno = alunos.get(i);
 
             if (aluno == null) {
-                alunos[i] = a;
+                alunos.set(i, a);
             }
         }
         return a;
@@ -485,12 +460,12 @@ public class ProgramaPrincipal {
             } else {
 
                 System.out.println("Informe as notas dos alunos: ");
-                float notas[] = new float[d.getAlunos().size()];
+                ArrayList<Float> notas = new ArrayList();
                 int i = 0;
 
                 while (i < d.getAlunos().size()) {
                     System.out.println("Nota do aluno " + d.getAlunos().get(i).toString());
-                    notas[i] = Float.parseFloat(br.readLine());
+                    notas.set(i, Float.parseFloat(br.readLine()));
                     i++;
                 }
                 ensino.salvaNotas(notas, curso, d);
@@ -519,8 +494,8 @@ public class ProgramaPrincipal {
         return d;
     }
 
-    private static Disciplina[] recebe_disciplinas(SetorEnsino ensino, BufferedReader br) throws IOException {
-        Disciplina[] disciplinas = new Disciplina[Curso.MAX_DISCIPLINAS];
+    private static ArrayList<Disciplina> recebe_disciplinas(SetorEnsino ensino, BufferedReader br) throws IOException {
+        ArrayList<Disciplina> disciplinas = new ArrayList();
 
         System.out.println("Digite ["
                 + OP_DISCIPLINA_SAIR
@@ -529,7 +504,7 @@ public class ProgramaPrincipal {
                 + "] para cadastrar disciplina");
         int op = Integer.parseInt(br.readLine());
 
-        for (int i = 0; op != OP_DISCIPLINA_SAIR && i < disciplinas.length; i++) {
+        for (int i = 0; op != OP_DISCIPLINA_SAIR && i < disciplinas.size(); i++) {
             System.out.println("Qual o nome do professor da disciplina?");
             String nome_professor = br.readLine();
             Professor professor = encontra_professor(ensino, nome_professor);
@@ -539,7 +514,7 @@ public class ProgramaPrincipal {
                 professor = cria_professor(br);
                 ensino.novoProfessor(professor);
             }
-            disciplinas[i] = cria_disciplina(br, professor);
+            disciplinas.set(i, cria_disciplina(br, professor));
             System.out.println("\n Digite [1] para terminar e [2] para cadastrar disciplina");
             op = Integer.parseInt(br.readLine());
         }
@@ -581,7 +556,7 @@ public class ProgramaPrincipal {
         a.setNome(br.readLine());
         System.out.println("PPC:");
         a.setPpc(br.readLine());
-        Disciplina[] disciplinas = recebe_disciplinas(ensino, br);
+        ArrayList<Disciplina> disciplinas = recebe_disciplinas(ensino, br);
 
         a.setDisciplinas(disciplinas);
         return a;
